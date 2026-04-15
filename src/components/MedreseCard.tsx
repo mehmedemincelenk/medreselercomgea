@@ -1,16 +1,20 @@
 import { Component } from '@geajs/core'
+import medreseStore from '../medrese-store'
 
-export default function MedreseCard({ medrese }) {
+export default function MedreseCard({ medrese }: { medrese: any }) {
   return (
-    <article class="glass-card medrese-card-animation">
+    <article class="glass-card medrese-card-animation" style="cursor: pointer;" click={() => medreseStore.openModal(medrese.id)}>
       <div style="position: relative; overflow: hidden; border-radius: 24px 24px 0 0;">
         <img 
           src={medrese.image} 
           alt={medrese.name} 
           style="width: 100%; height: 260px; object-fit: cover; transition: transform 0.5s ease;"
         />
-        <div style="position: absolute; top: 1.5rem; left: 1.5rem;">
+        <div style="position: absolute; top: 1.5rem; left: 1.5rem; display: flex; gap: 0.5rem;">
           <span class="badge primary">{medrese.city}</span>
+        </div>
+        <div style="position: absolute; top: 1.5rem; right: 1.5rem;">
+           <span class="badge" style="background: rgba(255,255,255,0.9); color: #e11d48; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">❤️ {medrese.likes}</span>
         </div>
       </div>
       
@@ -30,10 +34,10 @@ export default function MedreseCard({ medrese }) {
         </p>
         
         <div style="display: flex; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.05);">
-          <button class="primary" style="flex: 2; border-radius: 16px; font-weight: 700; border: none;" click={() => alert(medrese.name + ' detayları...')}>
+          <button class="primary" style="flex: 2; border-radius: 16px; font-weight: 700; border: none;" click={(e: any) => { e.stopPropagation(); medreseStore.openModal(medrese.id); }}>
             İncele
           </button>
-          <button class="secondary outline" style="flex: 1; border-radius: 16px; font-weight: 700;" click={() => alert('Bağış sayfasına yönlendiriliyorsunuz...')}>
+          <button class="secondary outline" style="flex: 1; border-radius: 16px; font-weight: 700;" click={(e: any) => { e.stopPropagation(); alert('Bağış sayfasına yönlendiriliyorsunuz...'); }}>
             Bağış
           </button>
         </div>
