@@ -1,0 +1,110 @@
+import {
+  GEA_ELEMENT,
+  GEA_RENDERED,
+  resetUidCounter,
+} from '@geajs/core'
+import type { GeaComponentConstructor, StoreRegistry } from './types'
+import { STORE_IMPL_OWN_KEYS } from './types'
+
+interface RestoreOptions {
+  preserveNull?: boolean
+}
+
+export function restoreStoreState(registry: StoreRegistry, options?: RestoreOptions): void {
+  if (typeof window === 'undefined') return
+  const state = window.__GEA_STATE__
+  if (!state || typeof state !== 'object') return
+
+  for (const [name, storeInstance] of Object.entries(registry)) {
+    const serialized = state[name]
+    if (!serialized || typeof serialized !== 'object') continue
+    for (const [key, value] of Object.entries(serialized)) {
+      if (key === 'constructor' || key === '__proto__' || STORE_IMPL_OWN_KEYS.has(key)) continue
+      try {
+        // Don't overwrite client-initialized values with null from SSR,
+        // unless preserveNull is set (for authoritative server nulls).
+        if (value === null && storeInstance[key] != null && !options?.preserveNull) continue
+        storeInstance[key] = value
+      } catch {
+        // Skip read-only properties
+      }
+    }
+  }
+}
+
+export function hydrate(
+  App: GeaComponentConstructor,
+  element: HTMLElement | null,
+  options?: { storeRegistry?: StoreRegistry },
+): void {
+  if (!element) {
+    throw new Error('[gea-ssr] hydrate: target element not found')
+  }
+
+  // Auto-detect: if element has content, hydrate; otherwise fall back to render
+  if (!element.hasChildNodes()) {
+    const app = new App()
+    if (typeof app.render === 'function') app.render(element)
+    return
+  }
+
+  // Restore store state from server
+  if (options?.storeRegistry) {
+    restoreStoreState(options.storeRegistry)
+  }
+
+  // Snapshot innerHTML before hydration for dev-mode mismatch detection
+  const savedInnerHTML = typeof import.meta !== 'undefined' && import.meta.env?.DEV ? element.innerHTML : ''
+
+  // Reset UID counter to match SSR-generated IDs so component IDs align with DOM
+  resetUidCounter(0)
+
+  // Hydration path — adopt existing DOM
+  const app = new App()
+
+  // Set the element to the existing DOM content
+  ;(app as any)[GEA_ELEMENT] = element.firstElementChild
+  ;(app as any)[GEA_RENDERED] = true
+
+  // Attach reactivity bindings (observers, events)
+  // v2: lifecycle hooks are invoked via well-known symbol keys when present
+  const attachBindings = (app as any)[Symbol.for('gea.attachBindings')]
+  if (typeof attachBindings === 'function') attachBindings.call(app)
+  const mountCompiled = (app as any)[Symbol.for('gea.mountCompiledChildComponents')]
+  if (typeof mountCompiled === 'function') mountCompiled.call(app)
+  const instantiateChildren = (app as any)[Symbol.for('gea.instantiateChildComponents')]
+  if (typeof instantiateChildren === 'function') instantiateChildren.call(app)
+  const setupEvents = (app as any)[Symbol.for('gea.setupEventDirectives')]
+  if (typeof setupEvents === 'function') setupEvents.call(app)
+  if (typeof app.onAfterRender === 'function') app.onAfterRender()
+  if (typeof app.onAfterRenderHooks === 'function') app.onAfterRenderHooks()
+
+  // Dev-mode hydration mismatch detection — runs AFTER hydration is fully complete
+  // Uses setTimeout to ensure all lifecycle hooks have finished before re-rendering
+  // Uses dynamic import() to avoid pulling server code into client bundle
+  if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+    setTimeout(async () => {
+      try {
+        const [{ renderToString }, { detectHydrationMismatch }] = await Promise.all([
+          import('./render'),
+          import('./mismatch'),
+        ])
+        resetUidCounter(0) // Safe: hydration is complete
+        const clientHtml = renderToString(App)
+        const mismatch = detectHydrationMismatch({ innerHTML: savedInnerHTML }, clientHtml)
+        if (mismatch) {
+          console.warn(
+            '[gea-ssr] Hydration mismatch detected.\n' +
+              'Server HTML: ' +
+              mismatch.server.substring(0, 200) +
+              '\n' +
+              'Client HTML: ' +
+              mismatch.client.substring(0, 200),
+          )
+        }
+      } catch {
+        // Silently skip mismatch detection if imports fail
+      }
+    }, 0)
+  }
+}

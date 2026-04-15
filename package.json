@@ -1,0 +1,21 @@
+{
+  "name": "igdtest",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@geajs/core": "^1.0.0",
+    "@geajs/ui": "^0.2.4",
+    "@supabase/supabase-js": "^2.103.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0",
+    "@geajs/vite-plugin": "^1.0.0"
+  }
+}

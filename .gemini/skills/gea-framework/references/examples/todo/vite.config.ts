@@ -1,0 +1,22 @@
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vite'
+import { geaCoreAliases } from '../shared/vite-config-base'
+import { geaPlugin } from '../../packages/vite-plugin-gea/src/index.ts'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+export default defineConfig({
+  root: __dirname,
+  plugins: [geaPlugin()],
+  resolve: {
+    alias: [...geaCoreAliases(resolve(__dirname, '../../packages'))],
+  },
+  build: {
+    modulePreload: { polyfill: false },
+  },
+  server: {
+    port: 5183,
+    open: true,
+  },
+})

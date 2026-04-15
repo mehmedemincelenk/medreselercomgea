@@ -1,0 +1,82 @@
+{
+  "name": "@geajs/vite-plugin",
+  "version": "2.0.1",
+  "description": "Vite plugin for Gea framework - JSX/TSX transform, reactivity, HMR",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Armagan Amcalar <armagan@amcalar.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dashersw/gea.git"
+  },
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "gea",
+    "jsx",
+    "tsx",
+    "reactivity",
+    "hmr",
+    "transform",
+    "compile-time"
+  ],
+  "bugs": {
+    "url": "https://github.com/dashersw/gea/issues"
+  },
+  "homepage": "https://github.com/dashersw/gea#readme",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "gea-env.d.ts"
+  ],
+  "scripts": {
+    "prepublishOnly": "tsdown",
+    "build": "tsdown",
+    "test": "tsx --conditions source --test 'tests/**/*.test.ts'",
+    "test:e2e": "npx playwright test --config=../../tests/e2e/playwright.config.ts",
+    "build:browser": "rollup -c rollup.browser.config.js",
+    "build:codemirror": "rollup -c rollup.codemirror.config.js",
+    "test:coverage": "c8 --reporter=text --reporter=lcov tsx --test 'tests/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@acemir/cssom": "^0.9.31",
+    "@babel/generator": "^7.23.0",
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0",
+    "eszter": "^0.3.0"
+  },
+  "devDependencies": {
+    "@codemirror/commands": "^6.10.3",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/language": "^6.12.2",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/view": "^6.40.0",
+    "@lezer/highlight": "^1.2.3",
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@types/node": "^25.4.0",
+    "c8": "^11.0.0",
+    "cssstyle": "^6.2.0",
+    "jsdom": "^28.1.0",
+    "rollup": "^4.60.0",
+    "rollup-plugin-esbuild": "^6.2.1",
+    "tsdown": "^0.21.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "vite": "^8.0.0"
+  }
+}

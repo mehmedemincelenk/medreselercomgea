@@ -1,0 +1,126 @@
+/* Medrese Rehberi - Full Design System Extensions */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #2d5a27;
+  --primary-hover: #1e3f1b;
+  --secondary: #d4af37;
+  --accent: #fcd34d;
+  --background: #f8fafc;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text-main);
+  background: var(--background);
+  margin: 0; padding: 0;
+}
+
+.app-layout {
+  background: radial-gradient(circle at top right, rgba(45, 90, 39, 0.05), transparent),
+              radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.05), transparent);
+}
+
+.hero-title {
+  font-size: 5.5rem;
+  font-weight: 900;
+  letter-spacing: -3px;
+  background: linear-gradient(to right, #1a202c, var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1.6rem;
+  color: var(--text-muted);
+  max-width: 800px;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+/* Stats Bar */
+.stat-item { text-align: center; }
+.stat-value { font-size: 2.5rem; font-weight: 900; color: var(--primary); line-height: 1; margin-bottom: 0.5rem; }
+.stat-label { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.stat-divider { width: 1px; height: 50px; background: rgba(0,0,0,0.05); }
+
+/* Tabs */
+.tab-button {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.05);
+  padding: 0.8rem 2rem;
+  border-radius: 16px;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.tab-button:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+.tab-button.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 10rem 0;
+  background: rgba(255,255,255,0.4);
+  border-radius: 40px;
+  backdrop-filter: blur(10px);
+  border: 2px dashed rgba(0,0,0,0.05);
+}
+
+/* Footer Links */
+.footer-links a {
+  display: block;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--primary); }
+
+/* Global Glass & Badges (Previous styles kept and improved) */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+}
+.glass-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15); }
+
+.badge { padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+.badge.primary { background: var(--primary); color: white; }
+.badge.secondary { background: rgba(255, 255, 255, 0.6); color: var(--text-main); }
+
+.search-input-custom {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 24px !important;
+  padding: 1.8rem 3rem !important;
+  font-size: 1.25rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.medrese-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 3rem; }
+
+nav.custom-navbar {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  position: sticky; top: 0; z-index: 1000;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}

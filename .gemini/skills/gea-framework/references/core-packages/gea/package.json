@@ -1,0 +1,90 @@
+{
+  "name": "@geajs/core",
+  "type": "module",
+  "version": "2.0.1",
+  "description": "A lightweight, reactive JavaScript UI framework with compile-time JSX and proxy-based stores",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist",
+    "tsconfig.json",
+    "jsx-runtime.mjs",
+    "jsx-runtime.d.mts",
+    "jsx-dev-runtime.mjs",
+    "jsx-dev-runtime.d.mts"
+  ],
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./runtime": {
+      "source": "./src/runtime.ts",
+      "types": "./dist/runtime.d.mts",
+      "import": "./dist/runtime.mjs"
+    },
+    "./router": {
+      "source": "./src/router/index.ts",
+      "types": "./dist/router.d.mts",
+      "import": "./dist/router.mjs"
+    },
+    "./jsx-runtime": {
+      "source": "./src/jsx-runtime.ts",
+      "types": "./jsx-runtime.d.mts",
+      "import": "./jsx-runtime.mjs"
+    },
+    "./jsx-dev-runtime": {
+      "source": "./src/jsx-dev-runtime.ts",
+      "types": "./jsx-dev-runtime.d.mts",
+      "import": "./jsx-dev-runtime.mjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dashersw/gea.git"
+  },
+  "keywords": [
+    "ui-framework",
+    "javascript",
+    "typescript",
+    "jsx",
+    "reactive",
+    "proxy",
+    "no-vdom",
+    "lightweight",
+    "mobile"
+  ],
+  "scripts": {
+    "build": "tsdown --config-loader unrun",
+    "prepublishOnly": "npm run build",
+    "size": "node -e \"const{gzipSync}=require('zlib'),{readFileSync}=require('fs');const b=gzipSync(readFileSync('dist/gea.js'));console.log('gzip size: '+(b.length/1024).toFixed(2)+' kB')\"",
+    "ts-type-check": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "tsx --conditions source --import ./tests/preload.ts --test tests/*.test.ts --test tests/examples/*.test.ts",
+    "test:coverage": "c8 --reporter=text --reporter=lcov tsx --conditions source --import ./tests/preload.ts --test tests/*.test.ts --test tests/examples/*.test.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Armagan Amcalar <armagan@amcalar.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/dashersw/gea/issues"
+  },
+  "homepage": "https://github.com/dashersw/gea#readme",
+  "dependencies": {
+    "@types/react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "c8": "^11.0.0",
+    "jsdom": "^29.0.0",
+    "quill": "^2.0.3",
+    "tsdown": "^0.21.2",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.0"
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "frameworks": ["keyed/vanillajs", "keyed/gea", "keyed/solid"]
+}
